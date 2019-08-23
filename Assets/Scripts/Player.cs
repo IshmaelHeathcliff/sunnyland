@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
         if (_hp <= 0)
         {
             _hpBar.value = 0;
-            GameManager.GameOver();
+            GameManager.instance.GameOver();
             this.enabled = false;
         }
         if (_hp < maxHp)
@@ -160,7 +160,7 @@ public class Player : MonoBehaviour
 
         if (other.gameObject.CompareTag("NextLevel"))
         {
-            GameManager.GameOver();
+            GameManager.instance.GameOver();
             this.enabled = false;
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameManager instance = null;
+    public static GameManager instance = null;
     private GameObject _items;
     private static GameObject _endInterface;
 
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         _items.SetActive(true);
     }
 
-    public static void GameOver()
+    public void GameOver()
     {
         _endInterface.SetActive(true);
         Application.Quit();
