@@ -7,6 +7,9 @@ TagManager:
   - Mask
   - Ground
   - Enemy
+  - Cherry
+  - Gem
+  - Ladder
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - 
   - 
   - Ground
-  - 
+  - LadderTop
   - 
   - 
   - 

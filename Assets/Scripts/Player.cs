@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
 {
     // ==========Jump==========
     public LayerMask ground; // physical operation layer
+    public LayerMask ladderTop;
     public Vector2 groundedCheckSize = new Vector2(0.3f, 0.1f);
     public float thrust = 13f; // jump force
     public float jumpTime = 0.2f; // the time the jump force lasts
@@ -30,6 +32,10 @@ public class Player : MonoBehaviour
     
     // ==========Crouch==========
     private bool _isCrouching; 
+    
+    // ==========Climb==========
+    private bool _isClimbing;
+    private bool tryClimbing;
     
     // ==========HP===========
     public float maxHp = 100;
@@ -140,6 +146,32 @@ public class Player : MonoBehaviour
         {
             other.gameObject.SetActive(false);
         }
+
+        if (other.gameObject.CompareTag("Cherry"))
+        {
+            other.gameObject.SetActive(false);
+            _hp += other.gameObject.GetComponent<Food>().HpCure;
+        }
+        if (other.gameObject.CompareTag("Gem"))
+        {
+           other.gameObject.SetActive(false);
+           _hp = maxHp;
+        }
+
+        if (other.gameObject.CompareTag("Ladder") && tryClimbing)
+        {
+            _isClimbing = true;
+            _rigidBody2D.isKinematic = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Ladder"))
+        {
+            _isClimbing = false;
+            _rigidBody2D.isKinematic = false;
+        }
     }
 
     private void Creep()
@@ -167,6 +199,39 @@ public class Player : MonoBehaviour
             radius *= 2;
             _circleCollider2D.radius = radius;
         }
+    }
+
+    private void TryClimb()
+    {
+        bool onLadderTop = Physics2D.OverlapPoint(_groundedCheckPoint, ladderTop);
+        bool downDown = Input.GetKeyDown(KeyCode.DownArrow);
+        bool downUp = Input.GetKeyUp(KeyCode.DownArrow);
+        bool upDown = Input.GetKeyDown(KeyCode.UpArrow);
+        bool upUp = Input.GetKeyUp(KeyCode.UpArrow);
+        if (onLadderTop)
+        {
+            tryClimbing = downDown && !downUp;
+        }
+        else
+        {
+            tryClimbing = true;
+        }
+    }
+    private void Climb()
+    {
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            _rigidBody2D.velocity = Vector2.down;
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            _rigidBody2D.velocity = Vector2.up;
+        }
+        else
+        {
+            _rigidBody2D.velocity = Vector2.zero;
+        }
+        
     }
     private void Move()
     {
@@ -228,13 +293,23 @@ public class Player : MonoBehaviour
             Creep();
             Move();
             Leap();
+            TryClimb();
         }
         if (_isDrawback)
         {
             Drawback();
-            HpChange();
+        }
+
+        if (_isClimbing)
+        {
+            Climb();
         }
 
 
+    }
+
+    private void Update()
+    {
+        HpChange();
     }
 }
