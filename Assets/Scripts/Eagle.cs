@@ -9,8 +9,7 @@ public class Eagle : Enemy
      private float _remainingPatrolTime;
  
      private float _remainingPatrolMoveTime;
- 
-     private static readonly int Fly = Animator.StringToHash("Fly");
+     private float _remainingDiveTime;
  
      // Start is called before the first frame update
      protected override void Awake()
@@ -18,6 +17,7 @@ public class Eagle : Enemy
          base.Awake(); 
          _remainingPatrolTime = patrolTime;
          _remainingPatrolMoveTime = patrolMoveTime;
+         _remainingDiveTime = patrolMoveTime / 2;
      }
      void Start()
      {
@@ -28,16 +28,22 @@ public class Eagle : Enemy
      {
          if (_remainingPatrolTime > 0)
          {
-             _animator.SetBool(Fly, true);
              _remainingPatrolTime -= Time.fixedDeltaTime;
              if (_remainingPatrolMoveTime > 0)
              {
                  _remainingPatrolMoveTime -= Time.fixedDeltaTime;
-                 _rigidBody2D.velocity = Vector2.left * moveSpeed;
+                 if (_remainingDiveTime > 0)
+                 {
+                     _remainingDiveTime -= Time.fixedDeltaTime;
+                     _rigidBody2D.velocity = new Vector2(-1 * moveSpeed, -Mathf.Abs(moveSpeed));
+                 }
+                 else
+                 { 
+                     _rigidBody2D.velocity = new Vector2(-1 * moveSpeed,  Mathf.Abs(moveSpeed));
+                 }
              }
              else
              {
-                 _animator.SetBool(Fly, false);
                  _rigidBody2D.velocity = Vector2.zero;
              }
          }
@@ -46,6 +52,7 @@ public class Eagle : Enemy
              _spriteRenderer.flipX = !_spriteRenderer.flipX;
              _remainingPatrolTime += patrolTime;
              _remainingPatrolMoveTime += patrolMoveTime;
+             _remainingDiveTime += patrolMoveTime / 2;
              moveSpeed *= -1f;
  
          }

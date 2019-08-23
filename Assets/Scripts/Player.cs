@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -11,9 +12,9 @@ public class Player : MonoBehaviour
 {
     // ==========Jump==========
     public LayerMask ground; // physical operation layer
-    public Vector2 groundedCheckSize;
-    public float thrust = 30f; // jump force
-    public float jumpTime = 0.1f; // the time the jump force lasts
+    public Vector2 groundedCheckSize = new Vector2(0.3f, 0.1f);
+    public float thrust = 13f; // jump force
+    public float jumpTime = 0.2f; // the time the jump force lasts
     
     private Vector2 _groundedCheckPoint ;
     private float _remainingJumpTime;
@@ -21,7 +22,7 @@ public class Player : MonoBehaviour
     private bool _isGrounded = true; // Is player grounded
 
     // ==========Move==========
-    public float moveSpeed = 2.0f;
+    public float moveSpeed = 4.0f;
     private bool _canMove = true;
     private Rigidbody2D _rigidBody2D;
     private CircleCollider2D _circleCollider2D;
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour
     private bool _isCrouching; 
     
     // ==========HP===========
-    public float maxHP;
+    public float maxHp = 100;
     public float HpChangeTime;
     private float _hp;
     private Slider _hpBar;
@@ -39,9 +40,9 @@ public class Player : MonoBehaviour
     private bool _isInvincible;
     
     // ==========Hurt==========
-    public float hurtTime = 0.2f;
-    public float drawbackTime = 0.2f;
-    public float hurtFeedback = 5f;
+    public float hurtTime = 1f;
+    public float drawbackTime = 0.5f;
+    public float hurtFeedback = 5f; 
     private float _remainingHurtTime;
     private float _remainingDrawbackTime;
     private bool _isDrawback;
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour
         _remainingJumpTime = jumpTime;
         
         // ==========HP==========
-        _hp = maxHP;
+        _hp = maxHp;
         _hpBar = GameObject.Find("HpBar").GetComponent<Slider>();
         
         
@@ -88,7 +89,7 @@ public class Player : MonoBehaviour
 
     private void HpChange()
     {
-        _hpBar.value = _hp / maxHP;
+        _hpBar.value = _hp / maxHp;
     }
     
     private void Drawback()
