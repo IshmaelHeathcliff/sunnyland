@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     
     // ==========Climb==========
     private bool _isClimbing;
-    private bool tryClimbing;
+    private float _climbingX;
     
     // ==========HP===========
     public float maxHp = 100;
@@ -57,14 +57,16 @@ public class Player : MonoBehaviour
     
     // ==========Animation==========
     private Animator _animator;
-    
-    
+
+
     // replace string names with hash codes
     private static readonly int Run = Animator.StringToHash("Run");
     private static readonly int Jump = Animator.StringToHash("Jump");
     private static readonly int JumpDown = Animator.StringToHash("JumpDown");
     private static readonly int Hurt = Animator.StringToHash("Hurt");
     private static readonly int Crouch = Animator.StringToHash("Crouch");
+    private static readonly int Climb1 = Animator.StringToHash("Climb");
+    private static readonly int ClimbStop = Animator.StringToHash("ClimbStop");
 
     private void Awake()
     {
@@ -96,7 +98,22 @@ public class Player : MonoBehaviour
 
     private void HpChange()
     {
-        _hpBar.value = _hp / maxHp;
+        if (_hp <= 0)
+        {
+            _hpBar.value = 0;
+            GameManager.GameOver();
+            this.enabled = false;
+        }
+        if (_hp < maxHp)
+        {
+            _hpBar.value = _hp / maxHp;
+        }
+
+        if (_hp >= maxHp)
+        {
+            _hp = maxHp;
+            _hpBar.value = 1f;
+        }
     }
     
     private void Drawback()
@@ -133,11 +150,38 @@ public class Player : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy") && !_isInvincible)
         {
             _animator.SetBool(Hurt, true);
+            _animator.SetBool(Jump, false);
             _canMove = false;
             _isDrawback = true;
             _isInvincible = true;
             _hp -= other.gameObject.GetComponent<Enemy>().attackDamage;
             _drawbackDirection = new Vector2(transform.position.x < other.transform.position.x ? -1 : 1, 0);
+        }
+
+        if (other.gameObject.CompareTag("NextLevel"))
+        {
+            GameManager.GameOver();
+            this.enabled = false;
+        }
+
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if(other.gameObject.CompareTag("Ladder"))
+        {
+            bool onLadderTop = Physics2D.OverlapBox(_groundedCheckPoint, groundedCheckSize, 0f, ladderTop);
+            if (Input.GetKeyDown(KeyCode.DownArrow) && onLadderTop)
+            {
+                _climbingX = other.transform.position.x;
+                _animator.SetBool(Climb1, true);
+                _animator.SetBool(Jump, false);
+                _rigidBody2D.isKinematic = true;
+                _circleCollider2D.isTrigger = true;
+                other.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+                _isClimbing = true;
+                _isJumping = false;
+            }
         }
     }
 
@@ -153,17 +197,26 @@ public class Player : MonoBehaviour
             other.gameObject.SetActive(false);
             _hp += other.gameObject.GetComponent<Food>().HpCure;
         }
+
         if (other.gameObject.CompareTag("Gem"))
         {
-           other.gameObject.SetActive(false);
-           _hp = maxHp;
+            other.gameObject.SetActive(false);
+            _hp = maxHp;
         }
+    }
 
-        if (other.gameObject.CompareTag("Ladder") && tryClimbing)
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Ladder"))
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.UpArrow))
             {
+                _climbingX = other.transform.position.x;
+                _animator.SetBool(Climb1, true);
+                _animator.SetBool(Jump, false);
+                _isJumping = false;
                 _isClimbing = true;
+                _circleCollider2D.isTrigger = true;
                 _rigidBody2D.isKinematic = true;
             }
         }
@@ -173,7 +226,15 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ladder"))
         {
+            bool onLadderTop = Physics2D.OverlapBox(_groundedCheckPoint, groundedCheckSize, 0f, ladderTop);
+            if (onLadderTop)
+            {
+                other.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+            }
+            _animator.SetBool(Jump, false);
+            _animator.SetBool(Climb1, false);
             _isClimbing = false;
+            _circleCollider2D.isTrigger = false;
             _rigidBody2D.isKinematic = false;
         }
     }
@@ -205,37 +266,31 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void TryClimb()
-    {
-        bool onLadderTop = Physics2D.OverlapCircle(_groundedCheckPoint, 0.1f, ladderTop);
-        if (onLadderTop && Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            tryClimbing = Physics2D.OverlapPoint(_groundedCheckPoint + new Vector2(0, -1), ladder);
-            if (tryClimbing)
-            {
-                _isClimbing = true;
-                _rigidBody2D.isKinematic = true;
-            }
-        }
-        else
-        {
-            tryClimbing = true;
-        }
-
-    }
     private void Climb()
     {
+        if (_isCrouching)
+        {
+            _animator.SetBool(Crouch, false);
+            _isCrouching = false;
+            moveSpeed *= 2;
+            float radius = _circleCollider2D.radius;
+            _circleCollider2D.offset = new Vector2(0,  radius) + _circleCollider2D.offset;
+            radius *= 2;
+            _circleCollider2D.radius = radius;
+        }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            _rigidBody2D.velocity = Vector2.down;
+            _rigidBody2D.MovePosition(new Vector2(_climbingX, transform.position.y - moveSpeed * Time.fixedDeltaTime));
+            _animator.SetBool(ClimbStop, false);
         }
         else if (Input.GetKey(KeyCode.UpArrow))
         {
-            _rigidBody2D.velocity = Vector2.up;
+            _rigidBody2D.MovePosition(new Vector2(_climbingX, transform.position.y + moveSpeed * Time.fixedDeltaTime));
+            _animator.SetBool(ClimbStop, false);
         }
         else
         {
-            _rigidBody2D.velocity = Vector2.zero;
+            _animator.SetBool(ClimbStop, true);
         }
         
     }
@@ -294,24 +349,21 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        if (_isClimbing)
+        {
+            Climb();
+        }
+        
         if (_canMove)
         {
             Creep();
             Move();
             Leap();
-            TryClimb();
         }
         if (_isDrawback)
         {
             Drawback();
         }
-
-        if (_isClimbing)
-        {
-            Climb();
-        }
-
-
     }
 
     private void Update()

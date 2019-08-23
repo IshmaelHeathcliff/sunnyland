@@ -1,18 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameManager instance = null;
+    private GameObject _items;
+    private static GameObject _endInterface;
+
+    private void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        _items = GameObject.Find("ToEnabled").transform.Find("items").gameObject;
+        _endInterface = GameObject.Find("UI").transform.Find("End").gameObject;
+    }
+
+    public void StartGame()
+    {
+        _items.SetActive(true);
+    }
+
+    public static void GameOver()
+    {
+        _endInterface.SetActive(true);
+        Application.Quit();
     }
 }

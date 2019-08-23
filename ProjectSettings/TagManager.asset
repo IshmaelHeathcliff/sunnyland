@@ -11,6 +11,7 @@ TagManager:
   - Gem
   - Ladder
   - LadderTop
+  - NextLevel
   layers:
   - Default
   - TransparentFX
@@ -45,12 +46,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Back
+    uniqueID: 3614556575
+    locked: 0
+  - name: Player
+    uniqueID: 4096730507
+    locked: 0
+  - name: Ground
+    uniqueID: 4289610189
+    locked: 0
+  - name: Enermy
+    uniqueID: 345054845
+    locked: 0
+  - name: Mask
+    uniqueID: 2863185813
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: UI
     uniqueID: 1886945227
-    locked: 0
-  - name: Ground
-    uniqueID: 4289610189
     locked: 0
