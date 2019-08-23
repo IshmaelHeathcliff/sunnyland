@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     // ==========Jump==========
     public LayerMask ground; // physical operation layer
     public LayerMask ladderTop;
+    public LayerMask ladder;
     public Vector2 groundedCheckSize = new Vector2(0.3f, 0.1f);
     public float thrust = 13f; // jump force
     public float jumpTime = 0.2f; // the time the jump force lasts
@@ -160,8 +161,11 @@ public class Player : MonoBehaviour
 
         if (other.gameObject.CompareTag("Ladder") && tryClimbing)
         {
-            _isClimbing = true;
-            _rigidBody2D.isKinematic = true;
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _isClimbing = true;
+                _rigidBody2D.isKinematic = true;
+            }
         }
     }
 
@@ -203,19 +207,21 @@ public class Player : MonoBehaviour
 
     private void TryClimb()
     {
-        bool onLadderTop = Physics2D.OverlapPoint(_groundedCheckPoint, ladderTop);
-        bool downDown = Input.GetKeyDown(KeyCode.DownArrow);
-        bool downUp = Input.GetKeyUp(KeyCode.DownArrow);
-        bool upDown = Input.GetKeyDown(KeyCode.UpArrow);
-        bool upUp = Input.GetKeyUp(KeyCode.UpArrow);
-        if (onLadderTop)
+        bool onLadderTop = Physics2D.OverlapCircle(_groundedCheckPoint, 0.1f, ladderTop);
+        if (onLadderTop && Input.GetKeyDown(KeyCode.DownArrow))
         {
-            tryClimbing = downDown && !downUp;
+            tryClimbing = Physics2D.OverlapPoint(_groundedCheckPoint + new Vector2(0, -1), ladder);
+            if (tryClimbing)
+            {
+                _isClimbing = true;
+                _rigidBody2D.isKinematic = true;
+            }
         }
         else
         {
             tryClimbing = true;
         }
+
     }
     private void Climb()
     {

@@ -10,6 +10,7 @@ TagManager:
   - Cherry
   - Gem
   - Ladder
+  - LadderTop
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - 
   - Ground
   - LadderTop
-  - 
+  - Ladder
   - 
   - 
   - 
@@ -49,4 +50,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1886945227
+    locked: 0
+  - name: Ground
+    uniqueID: 4289610189
     locked: 0
