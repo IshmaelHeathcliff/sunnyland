@@ -205,7 +205,7 @@ PrefabInstance:
     - target: {fileID: 4354125063099464793, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
       propertyPath: m_SortingLayer
-      value: -1
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 4354125063099464793, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
@@ -220,7 +220,7 @@ PrefabInstance:
     - target: {fileID: 4354125061929058789, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4354125061929058789, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
@@ -235,7 +235,7 @@ PrefabInstance:
     - target: {fileID: 4874026413475882368, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4874026413475882368, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
@@ -250,7 +250,7 @@ PrefabInstance:
     - target: {fileID: 5425710662344871138, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5425710662344871138, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
@@ -265,7 +265,7 @@ PrefabInstance:
     - target: {fileID: 4354125062150343041, guid: 2cd218ebafe95844c98021716f5ddd12,
         type: 3}
       propertyPath: m_TileAnchor.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd218ebafe95844c98021716f5ddd12, type: 3}
@@ -443,7 +443,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0087cb91109af84a94fac0519b779c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instance: {fileID: 0}
 --- !u!4 &597330043
 Transform:
   m_ObjectHideFlags: 0
@@ -1189,7 +1188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094732080}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0003, y: 2.749, z: 0}
+  m_LocalPosition: {x: 0, y: 2.75, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 1567386701}
@@ -1527,7 +1526,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273539906}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0005, y: 2.7496, z: 0}
+  m_LocalPosition: {x: 0, y: 2.75, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 369429295}
@@ -1688,7 +1687,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 0.5, y: 5.5}
+  m_Size: {x: 0.5, y: 5.5054245}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1702,7 +1701,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1567386699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.75, y: -3.25, z: 0}
+  m_LocalPosition: {x: 10.75, y: -3.2473, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1094732081}
@@ -1727,7 +1726,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.516129, y: 0.516129}
-    newSize: {x: 0.5, y: 5.5}
+    newSize: {x: 0.5, y: 5.5054245}
     adaptiveTilingThreshold: 0.5
     drawMode: 2
     adaptiveTiling: 0
@@ -2714,6 +2713,16 @@ PrefabInstance:
         type: 3}
       propertyPath: ladder.m_Bits
       value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541229851661709095, guid: 4cae0dc812946f44f9162791df6f6cf1,
+        type: 3}
+      propertyPath: groundedCheckSize.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541229851661709095, guid: 4cae0dc812946f44f9162791df6f6cf1,
+        type: 3}
+      propertyPath: groundedCheckSize.y
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7541229851661709088, guid: 4cae0dc812946f44f9162791df6f6cf1,
         type: 3}

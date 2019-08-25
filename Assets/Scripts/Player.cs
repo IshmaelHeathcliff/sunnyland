@@ -247,22 +247,12 @@ public class Player : MonoBehaviour
         {
             _animator.SetBool(Crouch, true);
             _isCrouching = true;
-            moveSpeed /= 2;
-            float radius = _circleCollider2D.radius;
-            radius /= 2;
-            _circleCollider2D.radius = radius;
-            _circleCollider2D.offset = new Vector2(0, - radius) + _circleCollider2D.offset;
         }
 
         if (endCrouch && _isCrouching)
         {
             _animator.SetBool(Crouch, false);
             _isCrouching = false;
-            moveSpeed *= 2;
-            float radius = _circleCollider2D.radius;
-            _circleCollider2D.offset = new Vector2(0,  radius) + _circleCollider2D.offset;
-            radius *= 2;
-            _circleCollider2D.radius = radius;
         }
     }
 
@@ -271,12 +261,6 @@ public class Player : MonoBehaviour
         if (_isCrouching)
         {
             _animator.SetBool(Crouch, false);
-            _isCrouching = false;
-            moveSpeed *= 2;
-            float radius = _circleCollider2D.radius;
-            _circleCollider2D.offset = new Vector2(0,  radius) + _circleCollider2D.offset;
-            radius *= 2;
-            _circleCollider2D.radius = radius;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
