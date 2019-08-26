@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     // ==========Hurt==========
     public float hurtTime = 1f;
     public float drawbackTime = 0.5f;
-    public float hurtFeedback = 5f; 
+    public float hurtFeedback = 5f;
     private float _remainingHurtTime;
     private float _remainingDrawbackTime;
     private bool _isDrawback;
